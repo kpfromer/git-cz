@@ -19,7 +19,7 @@ const MAX_HEADER_LENGTH: usize = 50;
 fn commit(message: String) -> Result<Output> {
     Command::new("git")
         .args(&["commit", "-m"])
-        .arg(format!("\"{}\"", message))
+        .arg(format!("{}", message))
         .output()
         .context("Failed to run git.")
 }
