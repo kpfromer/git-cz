@@ -13,9 +13,8 @@ struct Cli {}
 const TYPES: [&str; 9] = [
     "feat", "fix", "refactor", "chore", "test", "docs", "style", "ci", "perf",
 ];
-const max_header_length: usize = 50;
-const min_message_length: usize = 3;
-const max_message_length: usize = 64;
+const MIN_HEADER_LENGTH: usize = 3;
+const MAX_HEADER_LENGTH: usize = 50;
 
 fn commit(message: String) -> Result<Output> {
     Command::new("git")
@@ -45,16 +44,13 @@ fn main() -> Result<()> {
     let message: String = Input::with_theme(&theme)
         .with_prompt(format!("{}:", commit_type))
         .validate_with(|input: &String| -> Result<(), String> {
-            if input.len() < min_message_length {
-                Err(format!(
-                    "Message must be {} characters.",
-                    min_message_length
-                ))
+            if input.len() < MIN_HEADER_LENGTH {
+                Err(format!("Message must be {} characters.", MIN_HEADER_LENGTH))
             // "{}: {}"
-            } else if input.len() + commit_type.len() + 2 > max_header_length {
+            } else if input.len() + commit_type.len() + 2 > MAX_HEADER_LENGTH {
                 Err(format!(
                     "Message must be less than {} characters.",
-                    max_header_length,
+                    MAX_HEADER_LENGTH,
                 ))
             } else {
                 Ok(())
